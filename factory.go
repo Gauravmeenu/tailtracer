@@ -92,5 +92,6 @@ func NewFactory() receiver.Factory {
 	return receiver.NewFactory(
 		typeStr,
 		createDefaultConfig,
-		receiver.WithTraces(createTracesReceiver, component.StabilityLevelStable))
+		receiver.WithTraces(createTracesReceiver, component.StabilityLevelStable),
+	)
 }
