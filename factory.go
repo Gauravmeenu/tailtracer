@@ -49,7 +49,7 @@ package tailtracer
 
 import (
 	"context"
-    "strconv"
+	"strconv"
 
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/config"
@@ -70,7 +70,21 @@ func createDefaultConfig() component.Config {
 }
 
 func createTracesReceiver(_ context.Context, params receiver.CreateSettings , cfg component.Config, nextConsumer consumer.Traces) (receiver.Traces, error) {
-  return nil,nil
+  if nextConsumer == nil {
+	return nil, component.ErrNilNextConsumer	
+  }
+
+  logger := params.Logger
+  rCfg := cfg.(*Config)
+  
+  traceRcvr := &tailtracerReceiver{
+	  logger: logger,
+	  nextConsumer: nextConsumer,
+	  config: rCfg,
+  }
+  
+  return traceRcvr, nil
+
 }
 
 // NewFactory creates a factory for tailtracer receiver.
